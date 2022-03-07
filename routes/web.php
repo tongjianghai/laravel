@@ -27,3 +27,5 @@ Route::get('/posts/{post}', '\App\Http\Controllers\PostController@show');
 Route::post('/posts', '\App\Http\Controllers\PostController@store');
 Route::put('/posts/{post}', '\App\Http\Controllers\PostController@update');
 Route::get('/posts/delete', '\App\Http\Controllers\PostController@delete');
+
+Route::post('/posts/image/upload', '\App\Http\Controllers\PostController@imageUpload');
