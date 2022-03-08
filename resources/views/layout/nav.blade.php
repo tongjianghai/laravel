@@ -25,7 +25,7 @@
                         <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909__340.png" alt=""
                             class="img-rounded" style="border-radius:500px; height: 30px">
                         <a href="#" class="blog-nav-item dropdown-toggle" data-toggle="dropdown" role="button"
-                            aria-haspopup="true" aria-expanded="false">Kassandra Ankunding2 <span
+                            aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span
                                 class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/user/5">我的主页</a></li>

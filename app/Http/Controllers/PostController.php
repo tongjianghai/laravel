@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use \Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 
 class PostController extends Controller
 {
     public function index()
     {
+        Log::info('post index', ['id' => 'id']);
         $posts = Post::orderBy('created_at', 'desc')->paginate(3);
         return view('post/index', compact('posts'));
     }
@@ -38,26 +42,40 @@ class PostController extends Controller
             'title' => 'required|string|max:100|min:5',
             'content' => 'required|string|min:10',
         ]);
-        $post = Post::create(request(['title', 'content']));
+        $user_id = Auth::id();
+        $params = array_merge(request(['title', 'content']), compact('user_id'));
+        $post = Post::create($params);
         // $post = Post::create(['title' => request('title'), 'content' => request('content')]);
         return redirect('posts');
         // dd($post);
         // dd(request()->all());
     }
 
-    public function edit()
+    public function edit(Post $post)
     {
-        return view('post/edit');
+        return view('post/edit', compact('post'));
     }
 
-    public function update()
+    public function update(Post $post)
     {
-        return 0;
+        $this->validate(request(), [
+            'title' => 'required|string|max:100|min:5',
+            'content' => 'required|string|min:10',
+        ]);
+
+        $this->authorize('update', $post);
+
+        $post->title = request('title');
+        $post->content = request('content');
+        $post->save();
+        return redirect("/posts/{$post->id}");
     }
 
-    public function delete()
+    public function delete(Post $post)
     {
-        return 0;
+        $this->authorize('delete', $post);
+        $post->delete();
+        return redirect('/posts');
     }
 
     public function imageUpload(Request $request)
