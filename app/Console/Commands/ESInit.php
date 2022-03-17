@@ -41,9 +41,9 @@ class ESInit extends Command
         $client = new Client();
         $hosts = config('scout.elasticsearch.hosts');
         $index = config('scout.elasticsearch.index');
-        $url = $hosts['host'] . ":" . $hosts['port'] . '/_template/tmp';
+        $url = $hosts['host'] . ":" . $hosts['port'] . '/_template/posts_template';
 
-        $client->delete($url);
+        // $client->delete($url);
         $param = [
             'json' => [
                 'template' => $index,
@@ -71,7 +71,7 @@ class ESInit extends Command
         ];
         $client->put($url, $param);
         $url = $hosts['host'] . ":" . $hosts['port'] . "/" . $index;
-        $client->delete($url);
+        // $client->delete($url);
         $param = [
             'json' => [
                 'settings' => [
