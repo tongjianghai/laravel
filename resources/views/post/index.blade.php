@@ -41,7 +41,7 @@
                             href="/user/{{ $post->user_id }}">{{ $post->user->name }}</a></p>
 
                     {!! Str::limit($post->content, 100, '...') !!}
-                    <p class="blog-post-meta">赞 0 | 评论 0</p>
+                    <p class="blog-post-meta">赞 {{ $post->zans_count }} | 评论 {{ $post->comments_count }}</p>
                 </div>
             @endforeach
 

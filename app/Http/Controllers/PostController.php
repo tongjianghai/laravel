@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Comment;
+use App\Models\Zan;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
@@ -14,18 +16,31 @@ class PostController extends Controller
     public function index()
     {
         Log::info('post index', ['id' => 'id']);
-        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
+        $posts = Post::orderBy('created_at', 'desc')->withCount(['comments', 'zans'])->paginate(3);
         return view('post/index', compact('posts'));
     }
 
     public function show(Post $post)
     {
+        $post->load('comments');
         return view('post/show', compact('post'));
     }
 
     public function create()
     {
         return view('post/create');
+    }
+
+    public function search()
+    {
+        $this->validate(request(), [
+            "query" => "required",
+        ]);
+
+        $query = request('query');
+        $posts = Post::search($query)->paginate(10);
+
+        return view('post/search', compact('posts', 'query'));
     }
 
     public function store(Request $request)
@@ -83,5 +98,35 @@ class PostController extends Controller
         $path = $request->file('wangEditorH5File')->storePublicly(md5(time()));
         return asset('storage/' . $path);
         // dd($request->all());
+    }
+
+    public function comment(Post $post)
+    {
+        $this->validate(request(), [
+            'content' => 'required|min:3',
+        ]);
+
+        $comment = new Comment();
+        $comment->user_id = Auth::id();
+        $comment->content = request('content');
+        $post->comments()->save($comment);
+
+        return back();
+    }
+
+    public function zan(Post $post)
+    {
+        $param = [
+            'user_id' => Auth::id(),
+            'post_id' => $post->id,
+        ];
+        Zan::firstOrCreate($param);
+        return back();
+    }
+
+    public function unzan(Post $post)
+    {
+        $post->zan(Auth::id())->delete();
+        return back();
     }
 }

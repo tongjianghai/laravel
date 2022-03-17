@@ -28,6 +28,7 @@ Route::post('/user/me/setting', '\App\Http\Controllers\UserController@settingSto
 
 Route::get('/posts', '\App\Http\Controllers\PostController@index');
 Route::get('/posts/create', '\App\Http\Controllers\PostController@create');
+Route::get('/posts/search', '\App\Http\Controllers\PostController@search');
 Route::get('/posts/{post}/edit', '\App\Http\Controllers\PostController@edit');
 
 Route::get('/posts/{post}', '\App\Http\Controllers\PostController@show');
@@ -37,3 +38,11 @@ Route::put('/posts/{post}', '\App\Http\Controllers\PostController@update');
 Route::get('/posts/{post}/delete', '\App\Http\Controllers\PostController@delete');
 
 Route::post('/posts/image/upload', '\App\Http\Controllers\PostController@imageUpload');
+
+
+Route::get('/posts/{post}/zan', '\App\Http\Controllers\PostController@zan');
+Route::get('/posts/{post}/unzan', '\App\Http\Controllers\PostController@unzan');
+
+Route::get('/user/{user}', '\App\Http\Controllers\UserController@show');
+Route::post('/user/{user}/fan', '\App\Http\Controllers\UserController@fan');
+Route::post('/user/{user}/unfan', '\App\Http\Controllers\UserController@unfan');

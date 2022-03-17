@@ -1,5 +1,6 @@
     <div class="blog-masthead">
         <div class="container">
+            <form action="/posts/search", method="get">
             <ul class="nav navbar-nav navbar-left">
                 <li>
                     <a class="blog-nav-item " href="/posts">首页</a>
@@ -35,5 +36,6 @@
                     </div>
                 </li>
             </ul>
+            </form>
         </div>
     </div>

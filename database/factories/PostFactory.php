@@ -13,6 +13,7 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->sentence(6),
             'content' => $this->faker->paragraph(10),
+            'user_id' => 1,
         ];
     }
 }
