@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use \App\Models\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Laravel\Scout\Searchable;
 
 class Post extends Model
@@ -40,5 +41,31 @@ class Post extends Model
     public function zans()
     {
         return $this->hasMany(\App\Models\Zan::class);
+    }
+
+    public function scopeAuthorBy(Builder $builder, $user_id)
+    {
+        return $builder->where('user_id', $user_id);
+    }
+
+    public function postTopics()
+    {
+        return $this->hasMany(\App\Models\PostTopic::class, 'post_id', 'id');
+    }
+
+    public function scopeTopicNotBy(Builder $query, $topic_id)
+    {
+        return $query->doesntHave('postTopics', 'and', function ($q) use ($topic_id) {
+            $q->where('topic_id', $topic_id);
+        });
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('available', function (Builder $builder) {
+            $builder->whereIn('status', [0, 1]);
+        });
     }
 }
